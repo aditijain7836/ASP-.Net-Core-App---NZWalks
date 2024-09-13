@@ -1,5 +1,7 @@
 using NZWalks.API.Data;
 using Microsoft.EntityFrameworkCore;
+using NZWalks.API.Repositories;
+using NZWalks.API.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 // builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(
 //     builder.Configuration.GetConnectionString("NZWalksConnectionString")
 // ));
@@ -14,7 +17,8 @@ builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseMySql(
         builder.Configuration.GetConnectionString("NZWalksConnectionString"),
         new MySqlServerVersion(new Version(9, 0, 1)) // Adjust version as needed
     ));
-builder.Services.AddControllers();
+builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
 
